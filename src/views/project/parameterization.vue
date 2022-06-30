@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import addOrUpdate from '@/views/project/project-add-or-update'
+import addOrUpdate from '@/views/project/parameterization-add-or-update'
 import viewModule from '@/mixins/view-module'
 export default {
     components:{ addOrUpdate},

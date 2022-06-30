@@ -1,0 +1,625 @@
+Index: src/views/project/case-components/project-add-or-update.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/views/project/case-components/project-add-or-update.vue b/src/views/project/case-components/project-add-or-update.vue
+new file mode 100644
+--- /dev/null	(date 1656659059299)
++++ b/src/views/project/case-components/project-add-or-update.vue	(date 1656659059299)
+@@ -0,0 +1,112 @@
++<template>
++  <el-dialog
++    :title="type?'新增':'编辑'"
++    :visible.sync="visible"
++  >
++    <div class="host-add-or-update">
++      <el-form ref="dataForm" :model="dataForm" label-width="80px" :rules="rules">
++        <el-form-item label="项目名称" prop="name">
++          <el-input v-model="dataForm.name"></el-input>
++        </el-form-item>
++        <el-form-item label="项目类型" prop="type">
++          <el-select v-model="dataForm.type" placeholder="请选择">
++            <el-option label="web" value="web"></el-option>
++            <el-option label="app" value="app"></el-option>
++          </el-select>
++        </el-form-item>
++       <el-form-item label="创建人">
++          <el-input v-model="username" readonly></el-input>
++        </el-form-item>
++        <el-form-item label="描述" prop="description">
++          <el-input type="textarea" resize="none" :rows="4" v-model="dataForm.description" placeholder="请输入"></el-input>
++        </el-form-item>
++      </el-form>
++    </div>
++    <div slot="footer">
++      <el-button @click="visible = false">取 消</el-button>
++      <el-button type="primary" @click="submitData" v-loading="loading">确 定</el-button>
++    </div>
++  </el-dialog>
++</template>
++<script>
++import Cookies from 'js-cookie'
++export default {
++  data() {
++    return {
++      visible:false,
++      type:'post',
++      loading:false,
++      dataForm: {
++        id:"",
++        name: "",
++        type:"",
++        description:"",
++      },
++      rules:{
++        name:[{required: true, message:'请输入', trigger: 'blur'}],
++        type:[{required: true, message:'请输入', trigger: 'blur'}],
++      }
++    };
++  },
++  computed:{
++    username(){
++      return  Cookies.get("sys_username")
++    }
++  },
++  methods: {
++    init(data){
++        this.visible=true;
++        if(data){
++            this.type="put";
++            this.dataForm={
++              id:data.id,
++              name:data.name,
++              type:data.type,
++              description:data.description,
++            }
++             this.$nextTick(()=>{
++              this.$refs['dataForm'].clearValidate();
++            })
++        }
++        else{
++            this.type="post";
++            this.$nextTick(()=>{
++              this.$refs['dataForm'].resetFields();
++            })
++        }
++    },
++    submitData(){
++      this.$refs['dataForm'].validate(valid=>{
++        if(valid){
++          this.loading=true;
++          let url=this.type=='post'?'/api/project/':`/api/project/${this.dataForm.id}/`
++          this.$http({
++            url:url,
++            method:this.type,
++            data:{
++              ...this.dataForm,
++              user:Cookies.get("sys_uid")
++            }
++          }).then(res=>{
++            this.$message.success("操作成功")
++            this.visible = false;
++            this.$parent.query();
++          }).finally(()=>{
++            this.loading=false
++          })
++        }
++        else{
++          return false
++        }
++      })
++    }
++  },
++};
++</script>
++<style lang="scss" scoped>
++.host-add-or-update {
++  .el-form {
++
++  }
++}
++</style>
+Index: src/views/project/project-add-or-update.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <el-dialog\r\n    :title=\"type?'新增':'编辑'\"\r\n    :visible.sync=\"visible\"\r\n  >\r\n    <div class=\"parameterization-add-or-update\">\r\n      <el-form ref=\"dataForm\" :model=\"dataForm\" label-width=\"80px\" :rules=\"rules\">\r\n        <el-form-item label=\"参数名称\" prop=\"name\">\r\n          <el-input v-model=\"dataForm.name\"></el-input>\r\n        </el-form-item>\r\n        <el-form-item label=\"表达式\" prop=\"expression\">\r\n          <el-input v-model=\"dataForm.expression\"></el-input>\r\n        </el-form-item>\r\n        <el-form-item label=\"示例\" prop=\"example\">\r\n          <el-input v-model=\"dataForm.example\"></el-input>\r\n        </el-form-item>\r\n\r\n      </el-form>\r\n    </div>\r\n    <div slot=\"footer\">\r\n      <el-button @click=\"visible = false\">取 消</el-button>\r\n      <el-button type=\"primary\" @click=\"submitData\" v-loading=\"loading\">确 定</el-button>\r\n    </div>\r\n  </el-dialog>\r\n</template>\r\n<script>\r\nimport Cookies from 'js-cookie'\r\nexport default {\r\n  data() {\r\n    return {\r\n      visible:false,\r\n      type:'post',\r\n      loading:false,\r\n      dataForm: {\r\n        id:\"\",\r\n        name: \"\",\r\n        expression:\"\",\r\n        example:\"\",\r\n      },\r\n      rules:{\r\n        name:[{required: true, message:'请输入', trigger: 'blur'}],\r\n        expression:[{required: true, message:'请输入', trigger: 'blur'}],\r\n        example:[{required: true, message:'请输入', trigger: 'blur'}],\r\n\r\n      }\r\n    };\r\n  },\r\n  computed:{\r\n    username(){\r\n      return  Cookies.get(\"sys_username\")\r\n    }\r\n  },\r\n  methods: {\r\n    init(data){\r\n        this.visible=true;\r\n        if(data){\r\n            this.type=\"put\";\r\n            this.dataForm={\r\n              id:data.id,\r\n              name:data.name,\r\n              expression:data.expression,\r\n              example:data.example,\r\n            }\r\n             this.$nextTick(()=>{\r\n              this.$refs['dataForm'].clearValidate();\r\n            })\r\n        }\r\n        else{\r\n            this.type=\"post\";\r\n            this.$nextTick(()=>{\r\n              this.$refs['dataForm'].resetFields();\r\n            })\r\n        }\r\n    },\r\n    submitData(){\r\n      this.$refs['dataForm'].validate(valid=>{\r\n        if(valid){\r\n          this.loading=true;\r\n          let url=this.type=='post'?'/api/parameter/':`/api/parameter/${this.dataForm.id}/`\r\n          this.$http({\r\n            url:url,\r\n            method:this.type,\r\n            data:{\r\n              ...this.dataForm,\r\n              user:Cookies.get(\"sys_uid\")\r\n            }\r\n          }).then(res=>{\r\n            this.$message.success(\"操作成功\")\r\n            this.visible = false;\r\n            this.$parent.query();\r\n          }).finally(()=>{\r\n            this.loading=false\r\n          })\r\n        }\r\n        else{\r\n          return false\r\n        }\r\n      })\r\n    }\r\n  },\r\n};\r\n</script>\r\n<style lang=\"scss\" scoped>\r\n.host-add-or-update {\r\n  .el-form {\r\n\r\n  }\r\n}\r\n</style>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/views/project/project-add-or-update.vue b/src/views/project/project-add-or-update.vue
+--- a/src/views/project/project-add-or-update.vue	(revision 6edc4cdcde0d3311acf065f8c121e484a9e0a3e6)
++++ b/src/views/project/project-add-or-update.vue	(date 1656659490000)
+@@ -3,18 +3,23 @@
+     :title="type?'新增':'编辑'"
+     :visible.sync="visible"
+   >
+-    <div class="parameterization-add-or-update">
++    <div class="host-add-or-update">
+       <el-form ref="dataForm" :model="dataForm" label-width="80px" :rules="rules">
+-        <el-form-item label="参数名称" prop="name">
++        <el-form-item label="项目名称" prop="name">
+           <el-input v-model="dataForm.name"></el-input>
+         </el-form-item>
+-        <el-form-item label="表达式" prop="expression">
+-          <el-input v-model="dataForm.expression"></el-input>
++        <el-form-item label="项目类型" prop="type">
++          <el-select v-model="dataForm.type" placeholder="请选择">
++            <el-option label="web" value="web"></el-option>
++            <el-option label="app" value="app"></el-option>
++          </el-select>
+         </el-form-item>
+-        <el-form-item label="示例" prop="example">
+-          <el-input v-model="dataForm.example"></el-input>
++        <el-form-item label="创建人">
++          <el-input v-model="username" readonly></el-input>
+         </el-form-item>
+-
++        <el-form-item label="描述" prop="description">
++          <el-input type="textarea" resize="none" :rows="4" v-model="dataForm.description" placeholder="请输入"></el-input>
++        </el-form-item>
+       </el-form>
+     </div>
+     <div slot="footer">
+@@ -24,86 +29,84 @@
+   </el-dialog>
+ </template>
+ <script>
+-import Cookies from 'js-cookie'
+-export default {
+-  data() {
+-    return {
+-      visible:false,
+-      type:'post',
+-      loading:false,
+-      dataForm: {
+-        id:"",
+-        name: "",
+-        expression:"",
+-        example:"",
+-      },
+-      rules:{
+-        name:[{required: true, message:'请输入', trigger: 'blur'}],
+-        expression:[{required: true, message:'请输入', trigger: 'blur'}],
+-        example:[{required: true, message:'请输入', trigger: 'blur'}],
+-
+-      }
+-    };
+-  },
+-  computed:{
+-    username(){
+-      return  Cookies.get("sys_username")
+-    }
+-  },
+-  methods: {
+-    init(data){
++  import Cookies from 'js-cookie'
++  export default {
++    data() {
++      return {
++        visible:false,
++        type:'post',
++        loading:false,
++        dataForm: {
++          id:"",
++          name: "",
++          type:"",
++          description:"",
++        },
++        rules:{
++          name:[{required: true, message:'请输入', trigger: 'blur'}],
++          type:[{required: true, message:'请输入', trigger: 'blur'}],
++        }
++      };
++    },
++    computed:{
++      username(){
++        return  Cookies.get("sys_username")
++      }
++    },
++    methods: {
++      init(data){
+         this.visible=true;
+         if(data){
+-            this.type="put";
+-            this.dataForm={
+-              id:data.id,
+-              name:data.name,
+-              expression:data.expression,
+-              example:data.example,
+-            }
+-             this.$nextTick(()=>{
+-              this.$refs['dataForm'].clearValidate();
+-            })
++          this.type="put";
++          this.dataForm={
++            id:data.id,
++            name:data.name,
++            type:data.type,
++            description:data.description,
++          }
++          this.$nextTick(()=>{
++            this.$refs['dataForm'].clearValidate();
++          })
+         }
+         else{
+-            this.type="post";
+-            this.$nextTick(()=>{
+-              this.$refs['dataForm'].resetFields();
+-            })
++          this.type="post";
++          this.$nextTick(()=>{
++            this.$refs['dataForm'].resetFields();
++          })
+         }
+-    },
+-    submitData(){
+-      this.$refs['dataForm'].validate(valid=>{
+-        if(valid){
+-          this.loading=true;
+-          let url=this.type=='post'?'/api/parameter/':`/api/parameter/${this.dataForm.id}/`
+-          this.$http({
+-            url:url,
+-            method:this.type,
+-            data:{
+-              ...this.dataForm,
+-              user:Cookies.get("sys_uid")
+-            }
+-          }).then(res=>{
+-            this.$message.success("操作成功")
+-            this.visible = false;
+-            this.$parent.query();
+-          }).finally(()=>{
+-            this.loading=false
+-          })
+-        }
+-        else{
+-          return false
+-        }
+-      })
+-    }
+-  },
+-};
++      },
++      submitData(){
++        this.$refs['dataForm'].validate(valid=>{
++          if(valid){
++            this.loading=true;
++            let url=this.type=='post'?'/api/project/':`/api/project/${this.dataForm.id}/`
++            this.$http({
++              url:url,
++              method:this.type,
++              data:{
++                ...this.dataForm,
++                user:Cookies.get("sys_uid")
++              }
++            }).then(res=>{
++              this.$message.success("操作成功")
++              this.visible = false;
++              this.$parent.query();
++            }).finally(()=>{
++              this.loading=false
++            })
++          }
++          else{
++            return false
++          }
++        })
++      }
++    },
++  };
+ </script>
+ <style lang="scss" scoped>
+-.host-add-or-update {
+-  .el-form {
++  .host-add-or-update {
++    .el-form {
+ 
+-  }
+-}
++    }
++  }
+ </style>
+Index: src/views/project/parameterization-add-or-update.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <el-dialog\r\n    :title=\"type?'新增':'编辑'\"\r\n    :visible.sync=\"visible\"\r\n  >\r\n    <div class=\"host-add-or-update\">\r\n      <el-form ref=\"dataForm\" :model=\"dataForm\" label-width=\"80px\" :rules=\"rules\">\r\n        <el-form-item label=\"项目名称\" prop=\"name\">\r\n          <el-input v-model=\"dataForm.name\"></el-input>\r\n        </el-form-item>\r\n        <el-form-item label=\"项目类型\" prop=\"type\">\r\n          <el-select v-model=\"dataForm.type\" placeholder=\"请选择\">\r\n            <el-option label=\"web\" value=\"web\"></el-option>\r\n            <el-option label=\"app\" value=\"app\"></el-option>\r\n          </el-select>\r\n        </el-form-item>\r\n       <el-form-item label=\"创建人\">\r\n          <el-input v-model=\"username\" readonly></el-input>\r\n        </el-form-item>\r\n        <el-form-item label=\"描述\" prop=\"description\">\r\n          <el-input type=\"textarea\" resize=\"none\" :rows=\"4\" v-model=\"dataForm.description\" placeholder=\"请输入\"></el-input>\r\n        </el-form-item>\r\n      </el-form>\r\n    </div>\r\n    <div slot=\"footer\">\r\n      <el-button @click=\"visible = false\">取 消</el-button>\r\n      <el-button type=\"primary\" @click=\"submitData\" v-loading=\"loading\">确 定</el-button>\r\n    </div>\r\n  </el-dialog>\r\n</template>\r\n<script>\r\nimport Cookies from 'js-cookie'\r\nexport default {\r\n  data() {\r\n    return {\r\n      visible:false,\r\n      type:'post',\r\n      loading:false,\r\n      dataForm: {\r\n        id:\"\",\r\n        name: \"\",\r\n        type:\"\",\r\n        description:\"\",\r\n      },\r\n      rules:{\r\n        name:[{required: true, message:'请输入', trigger: 'blur'}],\r\n        type:[{required: true, message:'请输入', trigger: 'blur'}],\r\n      }\r\n    };\r\n  },\r\n  computed:{\r\n    username(){\r\n      return  Cookies.get(\"sys_username\")\r\n    }\r\n  },\r\n  methods: {\r\n    init(data){\r\n        this.visible=true;\r\n        if(data){\r\n            this.type=\"put\";\r\n            this.dataForm={\r\n              id:data.id,\r\n              name:data.name,\r\n              type:data.type,\r\n              description:data.description,\r\n            }\r\n             this.$nextTick(()=>{\r\n              this.$refs['dataForm'].clearValidate();\r\n            })\r\n        }\r\n        else{\r\n            this.type=\"post\";\r\n            this.$nextTick(()=>{\r\n              this.$refs['dataForm'].resetFields();\r\n            })\r\n        }\r\n    },\r\n    submitData(){\r\n      this.$refs['dataForm'].validate(valid=>{\r\n        if(valid){\r\n          this.loading=true;\r\n          let url=this.type=='post'?'/api/project/':`/api/project/${this.dataForm.id}/`\r\n          this.$http({\r\n            url:url,\r\n            method:this.type,\r\n            data:{\r\n              ...this.dataForm,\r\n              user:Cookies.get(\"sys_uid\")\r\n            }\r\n          }).then(res=>{\r\n            this.$message.success(\"操作成功\")\r\n            this.visible = false;\r\n            this.$parent.query();\r\n          }).finally(()=>{\r\n            this.loading=false\r\n          })\r\n        }\r\n        else{\r\n          return false\r\n        }\r\n      })\r\n    }\r\n  },\r\n};\r\n</script>\r\n<style lang=\"scss\" scoped>\r\n.host-add-or-update {\r\n  .el-form {\r\n\r\n  }\r\n}\r\n</style>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/views/project/parameterization-add-or-update.vue b/src/views/project/parameterization-add-or-update.vue
+--- a/src/views/project/parameterization-add-or-update.vue	(revision 6edc4cdcde0d3311acf065f8c121e484a9e0a3e6)
++++ b/src/views/project/parameterization-add-or-update.vue	(date 1656660241000)
+@@ -3,23 +3,18 @@
+     :title="type?'新增':'编辑'"
+     :visible.sync="visible"
+   >
+-    <div class="host-add-or-update">
++    <div class="parameterization-add-or-update">
+       <el-form ref="dataForm" :model="dataForm" label-width="80px" :rules="rules">
+-        <el-form-item label="项目名称" prop="name">
++        <el-form-item label="参数名称" prop="name">
+           <el-input v-model="dataForm.name"></el-input>
+         </el-form-item>
+-        <el-form-item label="项目类型" prop="type">
+-          <el-select v-model="dataForm.type" placeholder="请选择">
+-            <el-option label="web" value="web"></el-option>
+-            <el-option label="app" value="app"></el-option>
+-          </el-select>
++        <el-form-item label="表达式" prop="expression">
++          <el-input v-model="dataForm.expression"></el-input>
+         </el-form-item>
+-       <el-form-item label="创建人">
+-          <el-input v-model="username" readonly></el-input>
++        <el-form-item label="示例" prop="example">
++          <el-input v-model="dataForm.example"></el-input>
+         </el-form-item>
+-        <el-form-item label="描述" prop="description">
+-          <el-input type="textarea" resize="none" :rows="4" v-model="dataForm.description" placeholder="请输入"></el-input>
+-        </el-form-item>
++
+       </el-form>
+     </div>
+     <div slot="footer">
+@@ -29,84 +24,86 @@
+   </el-dialog>
+ </template>
+ <script>
+-import Cookies from 'js-cookie'
+-export default {
+-  data() {
+-    return {
+-      visible:false,
+-      type:'post',
+-      loading:false,
+-      dataForm: {
+-        id:"",
+-        name: "",
+-        type:"",
+-        description:"",
+-      },
+-      rules:{
+-        name:[{required: true, message:'请输入', trigger: 'blur'}],
+-        type:[{required: true, message:'请输入', trigger: 'blur'}],
+-      }
+-    };
+-  },
+-  computed:{
+-    username(){
+-      return  Cookies.get("sys_username")
+-    }
+-  },
+-  methods: {
+-    init(data){
++  import Cookies from 'js-cookie'
++  export default {
++    data() {
++      return {
++        visible:false,
++        type:'post',
++        loading:false,
++        dataForm: {
++          id:"",
++          name: "",
++          expression:"",
++          example:"",
++        },
++        rules:{
++          name:[{required: true, message:'请输入', trigger: 'blur'}],
++          expression:[{required: true, message:'请输入', trigger: 'blur'}],
++          example:[{required: true, message:'请输入', trigger: 'blur'}],
++
++        }
++      };
++    },
++    computed:{
++      username(){
++        return  Cookies.get("sys_username")
++      }
++    },
++    methods: {
++      init(data){
+         this.visible=true;
+         if(data){
+-            this.type="put";
+-            this.dataForm={
+-              id:data.id,
+-              name:data.name,
+-              type:data.type,
+-              description:data.description,
+-            }
+-             this.$nextTick(()=>{
+-              this.$refs['dataForm'].clearValidate();
+-            })
++          this.type="put";
++          this.dataForm={
++            id:data.id,
++            name:data.name,
++            expression:data.expression,
++            example:data.example,
++          }
++          this.$nextTick(()=>{
++            this.$refs['dataForm'].clearValidate();
++          })
+         }
+         else{
+-            this.type="post";
+-            this.$nextTick(()=>{
+-              this.$refs['dataForm'].resetFields();
+-            })
++          this.type="post";
++          this.$nextTick(()=>{
++            this.$refs['dataForm'].resetFields();
++          })
+         }
+-    },
+-    submitData(){
+-      this.$refs['dataForm'].validate(valid=>{
+-        if(valid){
+-          this.loading=true;
+-          let url=this.type=='post'?'/api/project/':`/api/project/${this.dataForm.id}/`
+-          this.$http({
+-            url:url,
+-            method:this.type,
+-            data:{
+-              ...this.dataForm,
+-              user:Cookies.get("sys_uid")
+-            }
+-          }).then(res=>{
+-            this.$message.success("操作成功")
+-            this.visible = false;
+-            this.$parent.query();
+-          }).finally(()=>{
+-            this.loading=false
+-          })
+-        }
+-        else{
+-          return false
+-        }
+-      })
+-    }
+-  },
+-};
++      },
++      submitData(){
++        this.$refs['dataForm'].validate(valid=>{
++          if(valid){
++            this.loading=true;
++            let url=this.type=='post'?'/api/parameter/':`/api/parameter/${this.dataForm.id}/`
++            this.$http({
++              url:url,
++              method:this.type,
++              data:{
++                ...this.dataForm,
++                user:Cookies.get("sys_uid")
++              }
++            }).then(res=>{
++              this.$message.success("操作成功")
++              this.visible = false;
++              this.$parent.query();
++            }).finally(()=>{
++              this.loading=false
++            })
++          }
++          else{
++            return false
++          }
++        })
++      }
++    },
++  };
+ </script>
+ <style lang="scss" scoped>
+-.host-add-or-update {
+-  .el-form {
++  .host-add-or-update {
++    .el-form {
+ 
+-  }
+-}
++    }
++  }
+ </style>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"40fb3671-03a6-4071-bd89-72af869d2f89\" name=\"Default Changelist\" comment=\"Default Changelist\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"27Rz1TVhzXqIjUnDCsrr8PKw3UW\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"settings.editor.selected.configurable\": \"org.jetbrains.plugins.github.ui.GithubSettingsConfigurable\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"$PROJECT_DIR$/src/views/project\" />\r\n      <recent name=\"$PROJECT_DIR$/src/assets\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"$PROJECT_DIR$/src/assets\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"40fb3671-03a6-4071-bd89-72af869d2f89\" name=\"Default Changelist\" comment=\"\" />\r\n      <created>1649297472286</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1649297472286</updated>\r\n      <workItem from=\"1649297474267\" duration=\"1837000\" />\r\n      <workItem from=\"1649300716879\" duration=\"1281000\" />\r\n      <workItem from=\"1650960960499\" duration=\"1854000\" />\r\n      <workItem from=\"1652601289526\" duration=\"1246000\" />\r\n      <workItem from=\"1653013293577\" duration=\"1849000\" />\r\n      <workItem from=\"1653130339944\" duration=\"502000\" />\r\n      <workItem from=\"1653272664556\" duration=\"383000\" />\r\n      <workItem from=\"1653294327380\" duration=\"523000\" />\r\n      <workItem from=\"1654054464652\" duration=\"1019000\" />\r\n      <workItem from=\"1655170989092\" duration=\"3651000\" />\r\n      <workItem from=\"1655986411136\" duration=\"1182000\" />\r\n      <workItem from=\"1656060583509\" duration=\"519000\" />\r\n      <workItem from=\"1656153184769\" duration=\"2737000\" />\r\n      <workItem from=\"1656232961582\" duration=\"1282000\" />\r\n      <workItem from=\"1656290286179\" duration=\"10365000\" />\r\n      <workItem from=\"1656568243479\" duration=\"2368000\" />\r\n      <workItem from=\"1656573812646\" duration=\"564000\" />\r\n      <workItem from=\"1656576144286\" duration=\"300000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Default Changelist\">\r\n      <created>1656576307904</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1656576307904</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Default Changelist\">\r\n      <created>1656576313920</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1656576313920</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Default Changelist\">\r\n      <created>1656576374799</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1656576374799</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Default Changelist\">\r\n      <created>1656576381229</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1656576381229</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"5\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Default Changelist\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Default Changelist\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6edc4cdcde0d3311acf065f8c121e484a9e0a3e6)
++++ b/.idea/workspace.xml	(date 1656660594754)
+@@ -1,7 +1,16 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="40fb3671-03a6-4071-bd89-72af869d2f89" name="Default Changelist" comment="Default Changelist" />
++    <list default="true" id="40fb3671-03a6-4071-bd89-72af869d2f89" name="Default Changelist" comment="Default Changelist">
++      <change afterPath="$PROJECT_DIR$/src/views/project/case-components/project-add-or-update.vue" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/views/project/parameterization-add-or-update.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/project/parameterization-add-or-update.vue" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/views/project/parameterization.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/project/parameterization.vue" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/views/project/project-add-or-update.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/project/project-add-or-update.vue" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -9,6 +18,9 @@
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="MarkdownSettingsMigration">
++    <option name="stateVersion" value="1" />
+   </component>
+   <component name="ProjectId" id="27Rz1TVhzXqIjUnDCsrr8PKw3UW" />
+   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+@@ -19,14 +31,19 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "WebServerToolWindowFactoryState": "false",
++    "last_opened_file_path": "C:/Users/Administrator/Desktop/testWeb",
+     "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
+     "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
+     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+     "vue.rearranger.settings.migration": "true"
+   }
+ }]]></component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
++      <recent name="C:\Users\Administrator\Desktop\testWeb" />
++      <recent name="C:\Users\Administrator\Desktop\testWeb\src\views\project\case-components" />
+       <recent name="$PROJECT_DIR$/src/views/project" />
+       <recent name="$PROJECT_DIR$/src/assets" />
+     </key>
+@@ -59,7 +76,8 @@
+       <workItem from="1656290286179" duration="10365000" />
+       <workItem from="1656568243479" duration="2368000" />
+       <workItem from="1656573812646" duration="564000" />
+-      <workItem from="1656576144286" duration="300000" />
++      <workItem from="1656576144286" duration="552000" />
++      <workItem from="1656659129775" duration="1078000" />
+     </task>
+     <task id="LOCAL-00001" summary="Default Changelist">
+       <created>1656576307904</created>
+@@ -89,7 +107,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1656576381229</updated>
+     </task>
+-    <option name="localTasksCounter" value="5" />
++    <task id="LOCAL-00005" summary="Default Changelist">
++      <created>1656576451067</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1656576451067</updated>
++    </task>
++    <option name="localTasksCounter" value="6" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+Index: src/views/project/parameterization.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n    <div class=\"project\">\r\n        <el-button type=\"primary\" icon=\"el-icon-plus\" @click=\"addExample\">新增参数化</el-button>\r\n        <el-table :data=\"dataList\" v-loading=\"dataListLoading\">\r\n            <el-table-column prop=\"id\" label=\"id\"></el-table-column>\r\n            <el-table-column prop=\"name\" label=\"参数化名称\"></el-table-column>\r\n            <el-table-column prop=\"expression\" label=\"表达式\"></el-table-column>\r\n            <el-table-column prop=\"example\" label=\"示例\"></el-table-column>\r\n            <el-table-column  label=\"操作\">\r\n                <template slot-scope=\"scope\">\r\n                    <div>\r\n                        <el-button type=\"warning\" size=\"mini\" @click=\"editExample(scope.row)\">编辑</el-button>\r\n                        <el-button type=\"danger\" size=\"mini\" @click=\"deleteHandle(scope.row.id)\">删除</el-button>\r\n                    </div>\r\n                </template>\r\n            </el-table-column>\r\n        </el-table>\r\n        <el-pagination\r\n            @current-change=\"pageCurrentChangeHandle\"\r\n            :page-size=\"20\"\r\n            :page-count=\"page\"\r\n            layout=\"total,prev, pager, next\"\r\n            :total=\"total\">\r\n        </el-pagination>\r\n        <addOrUpdate ref=\"addOrUpdate\" />\r\n    </div>\r\n</template>\r\n<script>\r\nimport addOrUpdate from '@/views/project/project-add-or-update'\r\nimport viewModule from '@/mixins/view-module'\r\nexport default {\r\n    components:{ addOrUpdate},\r\n    mixins:[viewModule],\r\n    data(){\r\n        return {\r\n            mixinViewModuleOptions: {\r\n                createdIsNeed: true,\r\n                getDataListURL: '/api/parameter/',\r\n                getDataListIsPage: true,\r\n            },\r\n            dataList:[]\r\n        }\r\n    },\r\n    methods:{\r\n        addExample(){\r\n            this.$refs['addOrUpdate'].init();\r\n        },\r\n        editExample(data){\r\n            this.$refs['addOrUpdate'].init(data);\r\n        }\r\n    }\r\n}\r\n</script>\r\n<style lang=\"scss\" scoped>\r\n\r\n</style>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/views/project/parameterization.vue b/src/views/project/parameterization.vue
+--- a/src/views/project/parameterization.vue	(revision 6edc4cdcde0d3311acf065f8c121e484a9e0a3e6)
++++ b/src/views/project/parameterization.vue	(date 1656660507000)
+@@ -26,7 +26,7 @@
+     </div>
+ </template>
+ <script>
+-import addOrUpdate from '@/views/project/project-add-or-update'
++import addOrUpdate from '@/views/project/parameterization-add-or-update'
+ import viewModule from '@/mixins/view-module'
+ export default {
+     components:{ addOrUpdate},

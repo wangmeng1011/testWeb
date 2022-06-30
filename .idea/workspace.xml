@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="40fb3671-03a6-4071-bd89-72af869d2f89" name="Default Changelist" comment="" />
+    <list default="true" id="40fb3671-03a6-4071-bd89-72af869d2f89" name="Default Changelist" comment="Default Changelist">
+      <change afterPath="$PROJECT_DIR$/src/views/project/case-components/project-add-or-update.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/project/parameterization-add-or-update.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/project/parameterization-add-or-update.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/project/parameterization.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/project/parameterization.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/project/project-add-or-update.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/project/project-add-or-update.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="27Rz1TVhzXqIjUnDCsrr8PKw3UW" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -16,22 +28,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/project" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.path.for.package.tslint" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/Desktop/testWeb&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\Desktop\testWeb" />
+      <recent name="C:\Users\Administrator\Desktop\testWeb\src\views\project\case-components" />
       <recent name="$PROJECT_DIR$/src/views/project" />
       <recent name="$PROJECT_DIR$/src/assets" />
     </key>
@@ -64,7 +76,45 @@
       <workItem from="1656290286179" duration="10365000" />
       <workItem from="1656568243479" duration="2368000" />
       <workItem from="1656573812646" duration="564000" />
+      <workItem from="1656576144286" duration="552000" />
+      <workItem from="1656659129775" duration="2310000" />
     </task>
+    <task id="LOCAL-00001" summary="Default Changelist">
+      <created>1656576307904</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1656576307904</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Default Changelist">
+      <created>1656576313920</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1656576313920</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Default Changelist">
+      <created>1656576374799</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1656576374799</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Default Changelist">
+      <created>1656576381229</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1656576381229</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Default Changelist">
+      <created>1656576451067</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1656576451067</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -80,6 +130,9 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Default Changelist" />
+    <option name="LAST_COMMIT_MESSAGE" value="Default Changelist" />
   </component>
 </project>
