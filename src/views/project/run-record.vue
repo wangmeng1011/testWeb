@@ -5,6 +5,13 @@
                 <el-table
                     :data="dataList"
                     v-loading="dataListLoading">
+                    <el-table-column prop="modular_function_case" label="项目名称">
+                      <template slot-scope="scope">
+                        <div>
+                          {{scope.row.api&&scope.row.project_name}}
+                        </div>
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="modular" label="api名称">
                         <template slot-scope="scope">
                             <div>
